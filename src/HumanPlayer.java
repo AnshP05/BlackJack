@@ -1,6 +1,7 @@
 public class HumanPlayer extends Player {
 
     private static final java.util.Scanner scanner = new java.util.Scanner(System.in);
+    private int bankroll;
 
     public HumanPlayer(String name) {
         super(name);
@@ -15,5 +16,9 @@ public class HumanPlayer extends Player {
             } else {
                 return false;
             }
+    }
+
+    public java.util.Scanner getScanner() {
+        return scanner;
     }
 }

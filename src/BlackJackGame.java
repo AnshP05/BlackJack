@@ -13,6 +13,22 @@ public class BlackJackGame {
     }
 
     public void startGame() {
+        System.out.println("Welcome to Blackjack!");
+        while(!gameOver) {
+            playOneRound();
+            System.out.println("Do you want to play another round? (yes/no)");
+            String response = player.getScanner().nextLine().trim().toLowerCase();
+            if(response.equals("no")) {
+                gameOver = true;
+                System.out.println("Thanks for playing! Goodbye!");
+            } else if(!response.equals("yes")) {
+                System.out.println("Invalid input. Exiting the game.");
+                gameOver = true;
+            }
+        }
+    }
+
+    private void playOneRound() {
         initialDeal();
         if(player.getHand().isBlackjack()) {
             System.out.println(player.getName() + " has a Blackjack! You win!");
@@ -79,10 +95,17 @@ public class BlackJackGame {
         }
     }
 
+
+
     public static void main(String[] args) {
-    BlackJackGame game = new BlackJackGame("Player");
-    game.startGame();
-}
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        System.out.println("Enter your name:");
+        String playerName = scanner.nextLine().trim();
+        scanner.close();
+        BlackJackGame game = new BlackJackGame(playerName);
+
+        game.startGame();
+    }
 
 }
 

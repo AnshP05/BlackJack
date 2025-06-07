@@ -9,6 +9,9 @@ public class Hand {
     public void addCard(Card card) {
         cards.add(card);
     }
+    public java.util.List<Card> getCards() {
+        return cards;
+    }
 
     public int getTotalValue() {
         int total = 0;
@@ -28,6 +31,9 @@ public class Hand {
 
     private boolean isBust(int total) {
         return total > 21;
+    }
+    public boolean isBust() {
+        return getTotalValue() > 21;
     }
 
     public boolean isBlackjack() {

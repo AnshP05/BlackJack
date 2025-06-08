@@ -3,9 +3,9 @@ public class HumanPlayer extends Player {
     private static final java.util.Scanner scanner = new java.util.Scanner(System.in);
     private double bankroll = 0.0;
 
-    public HumanPlayer(String name, double initialBet) {
+    public HumanPlayer(String name, double initialBankroll) {
         super(name);
-        this.bankroll = initialBet;
+        this.bankroll = initialBankroll;
     }
 
     public boolean wantsToHit() {

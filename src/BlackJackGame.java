@@ -5,6 +5,8 @@ public class BlackJackGame {
     private Dealer dealer;
     private boolean gameOver;
     private int numberOfRounds = 0;
+    private boolean lastRoundWasTie = false;
+    private double lastBet = 0.0;
 
     public BlackJackGame(String playerName, double startingBankroll) {
         deck = new Deck();
@@ -21,6 +23,11 @@ public class BlackJackGame {
                 break;
             }
             playOneRound();
+            if(player.getBankroll() <= 0) {
+                System.out.println("You have no money left. Game over!");
+                gameOver = true;
+                break;
+            }
             System.out.println("Do you want to play another round? (yes/no)");
             String response = player.getScanner().nextLine().trim().toLowerCase();
             if(response.equals("no")) {
@@ -34,13 +41,12 @@ public class BlackJackGame {
     }
 
     private void playOneRound() {
+        double bet = lastRoundWasTie ? lastBet : player.placeBet();
+        lastBet = bet;
         initialDeal();
-        double bet;
-        if(numberOfRounds > 0) {
-            bet = player.placeBet();
-        } else {
-            bet = player.getBankroll(); 
-        }
+        
+        System.out.printf("%s's money: $%.2f\n", player.getName(), player.getBankroll());
+        numberOfRounds++;
         
         if(player.getHand().isBlackjack()) {
             System.out.println(player.getName() + " has a Blackjack! You win!");
@@ -49,17 +55,19 @@ public class BlackJackGame {
         }
         while(player.wantsToHit()) {
             player.getHand().addCard(deck.dealCard());
+            System.out.println(player.getName() + "'s hand:\n" + player.getHand());
             if(player.getHand().isBlackjack()) {
                 System.out.println(player.getName() + " has a Blackjack! You win!");
                 player.adjustBankroll(bet * 1.5);
+                resetTie();
                 return;
             }
             if(player.getHand().isBust()) {
                 System.out.println(player.getName() + " busts! Dealer wins!");
                 player.adjustBankroll(-bet);
+                resetTie();
                 return;
             }
-            System.out.println(player.getName() + "'s hand:\n" + player.getHand());
         }
 
         System.out.println(dealer.getName() + "'s turn.");
@@ -68,6 +76,7 @@ public class BlackJackGame {
         if(dealer.getHand().isBlackjack()) {
             System.out.println(dealer.getName() + " has a Blackjack! Dealer wins!");
             player.adjustBankroll(-bet);
+            resetTie();
             return;
         }
         while(dealer.wantsToHit()) {
@@ -77,12 +86,13 @@ public class BlackJackGame {
         if(dealer.getHand().isBust()) {
             System.out.println(dealer.getName() + " busts! " + player.getName() + " wins!");
             player.adjustBankroll(bet);
+            resetTie();
             return;
         } else {
             determineWinner(bet);
         }
-        System.out.printf("%s's money: $%.2f\n", player.getName(), player.getBankroll());
-        numberOfRounds++;
+        
+        
 
     }
 
@@ -110,12 +120,19 @@ public class BlackJackGame {
         if(playerTotal > dealerTotal) {
             System.out.println(player.getName() + " wins!");
             player.adjustBankroll(bet);
+            resetTie();
         } else if(dealerTotal > playerTotal) {
             System.out.println(dealer.getName() + " wins!");
             player.adjustBankroll(-bet);
+            resetTie();
         } else {
-            System.out.println("It's a tie!");
+            System.out.println("It's a tie! Pushing bets to next round.");
+            lastRoundWasTie = true;
         }
+    }
+
+    private void resetTie() {
+        lastRoundWasTie = false;
     }
 
 
@@ -126,19 +143,19 @@ public class BlackJackGame {
             System.out.println("Welcome to Blackjack! Please enter your name:");
             String playerName = scanner.nextLine().trim();
             if (!playerName.isEmpty()) {
-                System.out.println("Please enter your initial bet: ");
+                System.out.println("Please enter your initial bankroll: ");
                 if (scanner.hasNextDouble()) {
-                    double initialBet = scanner.nextDouble();
-                    if (initialBet > 0) {
+                    double initialBankroll = scanner.nextDouble();
+                    if (initialBankroll > 0) {
                         scanner.nextLine(); // Consume the newline character
-                        BlackJackGame game = new BlackJackGame(playerName, initialBet);
+                        BlackJackGame game = new BlackJackGame(playerName, initialBankroll);
                         game.startGame();
                         break;
                     } else {
-                        System.out.println("Starting bet must be greater than zero. Please try again.");
+                        System.out.println("Starting bankroll must be greater than zero. Please try again.");
                     }
                 } else {
-                    System.out.println("Invalid input for bet. Please enter a valid number.");
+                    System.out.println("Invalid input for bankroll. Please enter a valid number.");
                     scanner.nextLine(); // Consume the invalid input
                 }
             } else {

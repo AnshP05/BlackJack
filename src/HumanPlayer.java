@@ -41,7 +41,6 @@ public class HumanPlayer extends Player {
         bet = scanner.nextDouble();
         scanner.nextLine();
     }
-    bankroll -= bet;
     return bet;
 }
 

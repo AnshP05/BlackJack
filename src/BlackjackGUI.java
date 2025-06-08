@@ -34,7 +34,8 @@ public class BlackjackGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        controller = new GameController(this); 
+        //controller = new GameController(this); 
+        //updateBankroll(controller.getHumanPlayer().getBankroll());
 
         initializeButtons();
         createCardSlots();
@@ -48,7 +49,7 @@ public class BlackjackGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        controller.startNewGame();
+        //controller.startNewGame();
     }
 
     private VBox buildLayout() {
@@ -67,7 +68,7 @@ public class BlackjackGUI extends Application {
         HBox controlsBox = new HBox(SPACING, hitButton, standButton, newGameButton);
         controlsBox.setAlignment(Pos.CENTER);
 
-        VBox gameLayout = new VBox(PADDING, playerSection, dealerSection, controlsBox, statusLabel);
+        VBox gameLayout = new VBox(PADDING, dealerSection, playerSection, controlsBox, statusLabel);
         gameLayout.setAlignment(Pos.CENTER);
         gameLayout.setStyle("-fx-background-color: #2E7D32;");
         return gameLayout;
@@ -99,8 +100,9 @@ public class BlackjackGUI extends Application {
         dealerLabel.setFont(LABEL_FONT);
         dealerLabel.setAlignment(Pos.CENTER);
 
-        bankrollLabel = new Label("Bankroll: " + controller.getHumanPlayer().getBankroll());
+        bankrollLabel = new Label("Bankroll: ");
         bankrollLabel.setFont(LABEL_FONT);
+        bankrollLabel.setAlignment(Pos.CENTER);
 
         statusLabel = new Label("Welcome to Blackjack!");
         statusLabel.setFont(LABEL_FONT);
@@ -108,14 +110,14 @@ public class BlackjackGUI extends Application {
     }
 
     void wireButtonActions() {
-        hitButton.setOnAction(e -> controller.playerHits());
-        standButton.setOnAction(e -> controller.playerStands());
-        newGameButton.setOnAction(e -> controller.startNewGame());
+        //hitButton.setOnAction(e -> controller.playerHits());
+        //standButton.setOnAction(e -> controller.playerStands());
+        //newGameButton.setOnAction(e -> controller.startNewGame());
     }
 
     // --- Methods the controller can call ---
 
-    void displayPlayerCard(Card card) {
+    /*void displayPlayerCard(Card card) {
         if (playerCardIndex < playerCardSlots.length) {
             playerCardSlots[playerCardIndex++].setImage(CardImageLoader.getImage(card));
         }
@@ -126,9 +128,9 @@ public class BlackjackGUI extends Application {
             dealerCardSlots[dealerCardIndex++].setImage(CardImageLoader.getImage(card));
         }
     }
+    */
 
-
-    void updateBankroll(double amount) {
+    void updateBankrollLabel(double amount) {
         bankrollLabel.setText("Bankroll: $" + amount);
     }
 
@@ -154,5 +156,10 @@ public class BlackjackGUI extends Application {
         hitButton.setDisable(!enable);
         standButton.setDisable(!enable);
     }
+
+    public static void main(String[] args) {
+    launch(args);
+}
+
 }
 

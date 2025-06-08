@@ -30,12 +30,11 @@ public class BlackjackGUI extends Application {
     int dealerCardIndex = 0;
 
 
-    GameController controller; // The brain - handles logic
+    GameController controller; 
 
     @Override
     public void start(Stage primaryStage) {
-        //controller = new GameController(this); 
-        //updateBankroll(controller.getHumanPlayer().getBankroll());
+
 
         initializeButtons();
         createCardSlots();
@@ -49,7 +48,10 @@ public class BlackjackGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        //controller.startNewGame();
+        controller = new GameController(this); 
+        controller.updateBankroll(controller.getHumanPlayer().getBankroll());
+
+        controller.startNewGame();
     }
 
     private VBox buildLayout() {
@@ -110,25 +112,25 @@ public class BlackjackGUI extends Application {
     }
 
     void wireButtonActions() {
-        //hitButton.setOnAction(e -> controller.playerHits());
-        //standButton.setOnAction(e -> controller.playerStands());
-        //newGameButton.setOnAction(e -> controller.startNewGame());
+        hitButton.setOnAction(e -> controller.playerHits());
+        standButton.setOnAction(e -> controller.playerStands());
+        newGameButton.setOnAction(e -> controller.startNewGame());
     }
 
     // --- Methods the controller can call ---
 
-    /*void displayPlayerCard(Card card) {
+    void displayPlayerCard(Card card) {
         if (playerCardIndex < playerCardSlots.length) {
-            playerCardSlots[playerCardIndex++].setImage(CardImageLoader.getImage(card));
+            playerCardSlots[playerCardIndex++].setImage(CardImageLoader.getCardImage(card));
         }
     }
 
     void displayDealerCard(Card card) {
         if (dealerCardIndex < dealerCardSlots.length) {
-            dealerCardSlots[dealerCardIndex++].setImage(CardImageLoader.getImage(card));
+            dealerCardSlots[dealerCardIndex++].setImage(CardImageLoader.getCardImage(card));
         }
     }
-    */
+    
 
     void updateBankrollLabel(double amount) {
         bankrollLabel.setText("Bankroll: $" + amount);

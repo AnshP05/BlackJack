@@ -3,11 +3,9 @@ public class HumanPlayer extends Player {
     private static final java.util.Scanner scanner = new java.util.Scanner(System.in);
     private double bankroll = 0.0;
 
-    public HumanPlayer(String name, double initialBankroll) {
+    public HumanPlayer(String name) {
         super(name);
-        this.bankroll = initialBankroll;
     }
-
     public boolean wantsToHit() {
     while (true) {
         System.out.println("Do you want to 'hit' or 'stand'? Type your choice:");

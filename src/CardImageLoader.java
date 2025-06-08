@@ -10,6 +10,8 @@ public class CardImageLoader {
     private static final Image backImage;
 
     static {
+        System.out.println(CardImageLoader.class.getResource("/cards/backOfCard.png"));
+
         backImage = new Image(CardImageLoader.class.getResourceAsStream(IMAGE_PATH + BACK_IMAGE_NAME));
         
         String[] suits = {"hearts", "diamonds", "clubs", "spades"};

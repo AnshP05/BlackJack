@@ -37,6 +37,7 @@ public class BlackJackGame {
                 System.out.println("Invalid input. Exiting the game.");
                 gameOver = true;
             }
+            deck.shuffle(); // Shuffle the deck for the next round
         }
     }
 
@@ -64,7 +65,6 @@ public class BlackJackGame {
             }
             if(player.getHand().isBust()) {
                 System.out.println(player.getName() + " busts! Dealer wins!");
-                player.adjustBankroll(-bet);
                 resetTie();
                 return;
             }
@@ -97,7 +97,6 @@ public class BlackJackGame {
     }
 
     private void initialDeal() {
-        deck.shuffle();
         player.resetHand();
         dealer.resetHand();
 
@@ -126,7 +125,7 @@ public class BlackJackGame {
             player.adjustBankroll(-bet);
             resetTie();
         } else {
-            System.out.println("It's a tie! Pushing bets to next round.");
+            System.out.printf("It's a tie! Your bet of $%.2f carries over to the next round.\n", bet);
             lastRoundWasTie = true;
         }
     }
@@ -143,7 +142,7 @@ public class BlackJackGame {
             System.out.println("Welcome to Blackjack! Please enter your name:");
             String playerName = scanner.nextLine().trim();
             if (!playerName.isEmpty()) {
-                System.out.println("Please enter your initial bankroll: ");
+                System.out.print("Please enter your initial bankroll: ");
                 if (scanner.hasNextDouble()) {
                     double initialBankroll = scanner.nextDouble();
                     if (initialBankroll > 0) {

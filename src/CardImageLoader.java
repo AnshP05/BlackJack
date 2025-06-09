@@ -15,7 +15,7 @@ public class CardImageLoader {
         backImage = new Image(CardImageLoader.class.getResourceAsStream(IMAGE_PATH + BACK_IMAGE_NAME));
         
         String[] suits = {"hearts", "diamonds", "clubs", "spades"};
-        String[] ranks = {"ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"};
+        String[] ranks = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace" };
 
         for(String suit : suits) {
             for(String rank : ranks) {

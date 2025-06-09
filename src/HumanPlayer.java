@@ -29,17 +29,12 @@ public class HumanPlayer extends Player {
         bankroll += amount;
     }
 
-    public double placeBet() {
-    System.out.println("Your current bankroll is: $" + bankroll);
-    System.out.print("Enter your bet amount: $");
-    double bet = scanner.nextDouble();
-    scanner.nextLine(); // consume newline
-    while(bet <= 0 || bet > bankroll) {
-        System.out.println("Invalid bet. Enter an amount between $0 and $" + bankroll);
-        bet = scanner.nextDouble();
-        scanner.nextLine();
+    public double placeBet(double betAmount) {
+        if (betAmount <= 0 || betAmount > bankroll) {
+            throw new IllegalArgumentException("Invalid bet amount.");
+        }
+        bankroll -= betAmount;
+        return betAmount;
     }
-    return bet;
-}
 
 }

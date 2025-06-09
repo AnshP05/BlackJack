@@ -10,6 +10,7 @@ public class Card {
         this.value = value;
     }
 
+
     public String getRank() {
         return rank;
     }

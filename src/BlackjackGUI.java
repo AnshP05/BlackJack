@@ -1,6 +1,3 @@
-// Main.java
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.scene.image.ImageView;
 
@@ -9,10 +6,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class BlackjackGUI extends Application {
@@ -20,7 +19,8 @@ public class BlackjackGUI extends Application {
     ImageView[] playerCardSlots = new ImageView[10];
     ImageView[] dealerCardSlots = new ImageView[10];
     Label bankrollLabel, statusLabel, playerLabel, dealerLabel;
-    Button hitButton, standButton, newGameButton;
+    Button hitButton, standButton, newGameButton, setBankRollButton;
+    TextField bankrollInput, betInput;
     final int CARD_WIDTH = 100;
     final int CARD_HEIGHT = 140;
     final int SPACING = 15;
@@ -35,6 +35,7 @@ public class BlackjackGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        
 
         initializeButtons();
         createCardSlots();
@@ -68,9 +69,12 @@ public class BlackjackGUI extends Application {
         dealerSection.setAlignment(Pos.CENTER);
 
         HBox controlsBox = new HBox(SPACING, hitButton, standButton, newGameButton);
-        controlsBox.setAlignment(Pos.CENTER);
+        controlsBox.setAlignment(Pos.CENTER); 
 
-        VBox gameLayout = new VBox(PADDING, dealerSection, playerSection, controlsBox, statusLabel);
+        HBox inputBox = new HBox(SPACING, bankrollInput, setBankRollButton, betInput);
+        inputBox.setAlignment(Pos.CENTER);
+
+        VBox gameLayout = new VBox(PADDING, dealerSection, playerSection, inputBox, controlsBox, statusLabel);
         gameLayout.setAlignment(Pos.CENTER);
         gameLayout.setStyle("-fx-background-color: #2E7D32;");
         return gameLayout;
@@ -80,6 +84,17 @@ public class BlackjackGUI extends Application {
         hitButton = new Button("Hit");
         standButton = new Button("Stand");
         newGameButton = new Button("New Game");
+        
+        bankrollInput = new TextField();
+        bankrollInput.setPromptText("Enter Bankroll");
+
+        betInput = new TextField();
+        betInput.setPromptText("Enter Bet Amount");
+        betInput.setDisable(true);
+
+        newGameButton.setDisable(true);
+
+        setBankRollButton = new Button("Set Bankroll");
     }
     void createCardSlots() {
         for (int i = 0; i < 10; i++) {
@@ -112,6 +127,31 @@ public class BlackjackGUI extends Application {
     }
 
     void wireButtonActions() {
+        setBankRollButton.setOnAction(e -> {
+        try {
+            double bankroll = Double.parseDouble(bankrollInput.getText());
+            if (bankroll <= 0) throw new NumberFormatException();
+
+            controller.getHumanPlayer().adjustBankroll(bankroll);
+
+            // Disable bankroll setup
+            setBankRollButton.setDisable(true);
+            bankrollInput.setDisable(true); // 🔒 gray it out so user can't edit
+            bankrollInput.clear();
+
+            // Enable bet input
+            betInput.setDisable(false);
+            betInput.requestFocus(); // 👀 move cursor to bet field
+
+            newGameButton.setDisable(false);
+
+            controller.getGui().updateBankrollLabel(controller.getHumanPlayer().getBankroll());
+            showMessage("Bankroll set to $" + bankroll + ". Please enter a bet amount.");
+        } catch (NumberFormatException ex) {
+            showMessage("Invalid bankroll amount. Please enter a positive number.");
+        }
+    });
+
         hitButton.setOnAction(e -> controller.playerHits());
         standButton.setOnAction(e -> controller.playerStands());
         newGameButton.setOnAction(e -> controller.startNewGame());
@@ -153,15 +193,24 @@ public class BlackjackGUI extends Application {
 
     }
 
+    void decrementDealerCardIndex() {
+        if (dealerCardIndex > 0) {
+            dealerCardIndex--;
+        }
+    }
 
     void enableControls(boolean enable) {
         hitButton.setDisable(!enable);
         standButton.setDisable(!enable);
     }
 
+    String getBetInput() {
+        return betInput.getText();
+    }
+
     public static void main(String[] args) {
-    launch(args);
-}
+        launch(args);
+    }
 
 }
 

@@ -7,8 +7,8 @@ public class Deck {
 
     public Deck() {
         cards = new java.util.ArrayList<>();
-        String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
-        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+        String[] suits = {"hearts", "diamonds", "clubs", "spades"};
+        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"};
 
         for(String suit : suits) {
             for(String rank : ranks) {
@@ -26,11 +26,11 @@ public class Deck {
 
     private int getCardValue(String rank) {
         switch(rank) {
-            case "J" :
-            case "Q" :
-            case "K" :
+            case "jack" :
+            case "queen" :
+            case "king" :
                 return 10;
-            case "A" :
+            case "ace" :
                 return 11; 
             default:
                 return Integer.parseInt(rank);

@@ -207,10 +207,5 @@ public class BlackjackGUI extends Application {
     String getBetInput() {
         return betInput.getText();
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
 }
 
